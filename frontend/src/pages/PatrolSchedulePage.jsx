@@ -93,6 +93,7 @@ function PatrolSchedulePage() {
   const [selectedOfficer, setSelectedOfficer] = useState("");
   const [manualOfficer, setManualOfficer] = useState("");
   const [patrolOfficers, setPatrolOfficers] = useState([]);
+  const [officerSearch, setOfficerSearch] = useState("");
 
   useEffect(() => {
     loadOfficersFromBackend();
@@ -140,13 +141,25 @@ function PatrolSchedulePage() {
     patrolTimeOption === "CUSTOM" ? customPatrolTime.trim() : patrolTimeOption;
 
   const availableOfficers = useMemo(() => {
-    return officersPool.filter(
-      (officer) =>
-        !patrolOfficers.some(
-          (item) => item.toLowerCase() === officer.label.toLowerCase()
-        )
-    );
-  }, [officersPool, patrolOfficers]);
+    const query = officerSearch.trim().toLowerCase();
+
+    return officersPool.filter((officer) => {
+      const alreadyAdded = patrolOfficers.some(
+        (item) => item.toLowerCase() === officer.label.toLowerCase()
+      );
+
+      if (alreadyAdded) return false;
+
+      if (!query) return true;
+
+      return (
+        officer.label.toLowerCase().includes(query) ||
+        officer.fullName.toLowerCase().includes(query) ||
+        officer.rank.toLowerCase().includes(query) ||
+        officer.forceNumber.toLowerCase().includes(query)
+      );
+    });
+  }, [officersPool, patrolOfficers, officerSearch]);
 
   const addOfficerToPatrol = () => {
     if (!selectedOfficer) {
@@ -165,6 +178,7 @@ function PatrolSchedulePage() {
 
     setPatrolOfficers((prev) => [...prev, selectedOfficer]);
     setSelectedOfficer("");
+    setOfficerSearch("");
   };
 
   const addManualOfficerToPatrol = () => {
@@ -562,31 +576,56 @@ function PatrolSchedulePage() {
               </label>
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <select
-                value={selectedOfficer}
-                onChange={(e) => setSelectedOfficer(e.target.value)}
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={officerSearch}
+                onChange={(e) => setOfficerSearch(e.target.value)}
+                placeholder={officersLoading ? "Inapakia askari..." : "Tafuta askari..."}
                 disabled={officersLoading}
                 className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10 disabled:cursor-not-allowed disabled:bg-slate-100"
-              >
-                <option value="">
-                  {officersLoading ? "Inapakia askari..." : "Chagua askari"}
-                </option>
-                {availableOfficers.map((officer) => (
-                  <option key={officer.id} value={officer.label}>
-                    {officer.label}
-                  </option>
-                ))}
-              </select>
+              />
 
-              <button
-                type="button"
-                onClick={addOfficerToPatrol}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1f2f86] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#18256a]"
-              >
-                <Plus className="h-4 w-4" />
-                Ongeza
-              </button>
+              <div className="max-h-56 overflow-y-auto rounded-2xl border border-slate-200 bg-white">
+                {availableOfficers.length > 0 ? (
+                  availableOfficers.slice(0, 20).map((officer) => (
+                    <button
+                      key={officer.id}
+                      type="button"
+                      onClick={() => setSelectedOfficer(officer.label)}
+                      className={`flex w-full items-start justify-between gap-3 border-b border-slate-100 px-4 py-3 text-left text-sm transition last:border-b-0 ${
+                        selectedOfficer === officer.label
+                          ? "bg-blue-50 text-[#1f2f86]"
+                          : "text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      <span className="break-words">{officer.label}</span>
+                      {selectedOfficer === officer.label ? (
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+                      ) : null}
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-4 py-4 text-sm text-slate-500">
+                    Hakuna askari aliyepatikana.
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="w-full rounded-2xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-700">
+                  {selectedOfficer || "Hakuna askari aliyechaguliwa"}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addOfficerToPatrol}
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1f2f86] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#18256a]"
+                >
+                  <Plus className="h-4 w-4" />
+                  Ongeza
+                </button>
+              </div>
             </div>
           </div>
 

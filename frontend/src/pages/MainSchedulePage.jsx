@@ -201,6 +201,7 @@ function MainSchedulePage() {
   const [officersPool, setOfficersPool] = useState([]);
   const [officersLoading, setOfficersLoading] = useState(true);
   const [savingSchedule, setSavingSchedule] = useState(false);
+  const [sectionOfficerSearch, setSectionOfficerSearch] = useState({});
 
   const [activeSections, setActiveSections] = useState([
     {
@@ -274,6 +275,34 @@ function MainSchedulePage() {
     );
   }, [activeSections]);
 
+  const getFilteredOfficersForSection = (sectionId) => {
+    const query = (sectionOfficerSearch[sectionId] || "").trim().toLowerCase();
+
+    const section = activeSections.find((item) => item.id === sectionId);
+    if (!section) return officersPool;
+
+    const alreadyAddedLabels = section.officers.map((officer) =>
+      typeof officer === "string" ? officer : officer.label
+    );
+
+    return officersPool.filter((officer) => {
+      const alreadyAdded = alreadyAddedLabels.some(
+        (label) => label.toLowerCase() === officer.label.toLowerCase()
+      );
+
+      if (alreadyAdded) return false;
+
+      if (!query) return true;
+
+      return (
+        officer.label.toLowerCase().includes(query) ||
+        officer.fullName.toLowerCase().includes(query) ||
+        officer.rank.toLowerCase().includes(query) ||
+        officer.forceNumber.toLowerCase().includes(query)
+      );
+    });
+  };
+
   const addSelectedSection = () => {
     if (!selectedSection) {
       alert("Chagua section kwanza.");
@@ -329,6 +358,12 @@ function MainSchedulePage() {
     setActiveSections((prev) =>
       prev.filter((section) => section.id !== sectionId)
     );
+
+    setSectionOfficerSearch((prev) => {
+      const updated = { ...prev };
+      delete updated[sectionId];
+      return updated;
+    });
   };
 
   const setSelectedOfficerForSection = (sectionId, officerLabel) => {
@@ -339,6 +374,11 @@ function MainSchedulePage() {
           : section
       )
     );
+
+    setSectionOfficerSearch((prev) => ({
+      ...prev,
+      [sectionId]: officerLabel,
+    }));
   };
 
   const addOfficerToSection = (sectionId) => {
@@ -381,6 +421,11 @@ function MainSchedulePage() {
         const warning = shouldWarn
           ? `WARNING: ${officerObj.label} wiki iliyopita alikuwa ${officerObj.lastWeekSection}. Unaweka tena kwenye group hiyo hiyo.`
           : null;
+
+        setSectionOfficerSearch((prevSearch) => ({
+          ...prevSearch,
+          [sectionId]: "",
+        }));
 
         return {
           ...section,
@@ -983,33 +1028,65 @@ function MainSchedulePage() {
                     Chagua Askari
                   </label>
 
-                  <div className="flex flex-col gap-3 sm:flex-row">
-                    <select
-                      value={section.selectedOfficer}
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      value={sectionOfficerSearch[section.id] || ""}
                       onChange={(e) =>
-                        setSelectedOfficerForSection(section.id, e.target.value)
+                        setSectionOfficerSearch((prev) => ({
+                          ...prev,
+                          [section.id]: e.target.value,
+                        }))
                       }
+                      placeholder={officersLoading ? "Inapakia askari..." : "Tafuta askari..."}
                       disabled={officersLoading}
                       className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10 disabled:cursor-not-allowed disabled:bg-slate-100"
-                    >
-                      <option value="">
-                        {officersLoading ? "Inapakia askari..." : "Chagua askari"}
-                      </option>
-                      {officersPool.map((officer) => (
-                        <option key={officer.id} value={officer.label}>
-                          {officer.label}
-                        </option>
-                      ))}
-                    </select>
+                    />
 
-                    <button
-                      type="button"
-                      onClick={() => addOfficerToSection(section.id)}
-                      className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1f2f86] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#18256a]"
-                    >
-                      <Plus className="h-4 w-4" />
-                      Ongeza
-                    </button>
+                    <div className="max-h-56 overflow-y-auto rounded-2xl border border-slate-200 bg-white">
+                      {getFilteredOfficersForSection(section.id).length > 0 ? (
+                        getFilteredOfficersForSection(section.id)
+                          .slice(0, 20)
+                          .map((officer) => (
+                            <button
+                              key={officer.id}
+                              type="button"
+                              onClick={() =>
+                                setSelectedOfficerForSection(section.id, officer.label)
+                              }
+                              className={`flex w-full items-start justify-between gap-3 border-b border-slate-100 px-4 py-3 text-left text-sm transition last:border-b-0 ${
+                                section.selectedOfficer === officer.label
+                                  ? "bg-blue-50 text-[#1f2f86]"
+                                  : "text-slate-700 hover:bg-slate-50"
+                              }`}
+                            >
+                              <span className="break-words">{officer.label}</span>
+                              {section.selectedOfficer === officer.label ? (
+                                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+                              ) : null}
+                            </button>
+                          ))
+                      ) : (
+                        <div className="px-4 py-4 text-sm text-slate-500">
+                          Hakuna askari aliyepatikana.
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                      <div className="w-full rounded-2xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-700">
+                        {section.selectedOfficer || "Hakuna askari aliyechaguliwa"}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => addOfficerToSection(section.id)}
+                        className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1f2f86] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#18256a]"
+                      >
+                        <Plus className="h-4 w-4" />
+                        Ongeza
+                      </button>
+                    </div>
                   </div>
 
                   {section.warnings.length > 0 && (
