@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/officers";
+const API_URL = "https://tanganyika-pms-backend.onrender.com/api/officers";
 
 export async function fetchOfficers() {
   const response = await fetch(API_URL);

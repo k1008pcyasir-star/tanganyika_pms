@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = "https://tanganyika-pms-backend.onrender.com/api/auth";
 
 export async function loginAdmin(loginData) {
   const response = await fetch(`${API_URL}/login`, {

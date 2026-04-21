@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/schedules";
+const API_URL = "https://tanganyika-pms-backend.onrender.com/api/schedules";
 
 export async function fetchSchedules() {
   const response = await fetch(API_URL);

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/rotations";
+const API_URL = "https://tanganyika-pms-backend.onrender.com/api/rotations";
 
 export async function fetchLatestRotations() {
   const response = await fetch(API_URL);
