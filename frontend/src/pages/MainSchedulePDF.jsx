@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 10.5,
   },
   signatureWrap: {
-    marginTop: 26,
+    marginTop: 14,
     alignItems: "center",
     textAlign: "center",
   },
@@ -145,6 +145,7 @@ function renderOfficerLabel(officer) {
 
 function normalizeFixedValue(value) {
   if (Array.isArray(value)) return value;
+
   if (typeof value === "string") {
     if (value.includes(",")) {
       return value
@@ -152,16 +153,62 @@ function normalizeFixedValue(value) {
         .map((item) => item.trim())
         .filter(Boolean);
     }
+
     return value.trim() ? [value.trim()] : [];
   }
+
   return [];
+}
+
+function estimateFixedBlockHeight(item) {
+  const values = normalizeFixedValue(item.value);
+  const itemCount = values.length > 0 ? values.length : 1;
+
+  return 1.8 + itemCount * 0.95;
+}
+
+function estimateSectionHeight(section) {
+  const officers = section?.officers || [];
+  const itemCount = officers.length > 0 ? officers.length : 1;
+
+  return 2 + itemCount * 0.95;
+}
+
+function distributeSectionsBalanced(fixedSections = [], activeSections = []) {
+  const sortedSections = sortSections(activeSections);
+
+  const leftSections = [];
+  const rightSections = [];
+
+  let leftWeight = fixedSections.reduce(
+    (sum, item) => sum + estimateFixedBlockHeight(item),
+    0
+  );
+  let rightWeight = 0;
+
+  sortedSections.forEach((section) => {
+    const sectionWeight = estimateSectionHeight(section);
+
+    if (leftWeight <= rightWeight) {
+      leftSections.push(section);
+      leftWeight += sectionWeight;
+    } else {
+      rightSections.push(section);
+      rightWeight += sectionWeight;
+    }
+  });
+
+  return {
+    leftSections,
+    rightSections,
+  };
 }
 
 function FixedBlock({ title, value }) {
   const values = normalizeFixedValue(value);
 
   return (
-    <View style={styles.block}>
+    <View style={styles.block} wrap={false}>
       <Text style={styles.blockTitle}>{title}</Text>
 
       {values.length > 1 ? (
@@ -183,7 +230,7 @@ function FixedBlock({ title, value }) {
 
 function SectionBlock({ title, officers }) {
   return (
-    <View style={styles.block}>
+    <View style={styles.block} wrap={false}>
       <Text style={styles.blockTitle}>{title}</Text>
 
       {officers && officers.length > 0 ? (
@@ -201,17 +248,6 @@ function SectionBlock({ title, officers }) {
   );
 }
 
-function chunkSectionsForPreview(fixedSections = [], activeSections = []) {
-  const sortedSections = sortSections(activeSections);
-  const half = Math.ceil(sortedSections.length / 2);
-
-  return {
-    leftSections: sortedSections.slice(0, half),
-    rightSections: sortedSections.slice(half),
-    fixedSections,
-  };
-}
-
 function MainSchedulePDF({
   scheduleTitle = "MPANGO KAZI WA KITUO CHA POLISI TANGANYIKA",
   dateFrom = "",
@@ -222,7 +258,7 @@ function MainSchedulePDF({
   signatureRank = "SP",
   signatureTitle = "MKUU WA KITUO CHA POLISI TANGANYIKA",
 }) {
-  const { leftSections, rightSections } = chunkSectionsForPreview(
+  const { leftSections, rightSections } = distributeSectionsBalanced(
     fixedSections,
     activeSections
   );
@@ -230,7 +266,7 @@ function MainSchedulePDF({
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
+        <View style={styles.header} wrap={false}>
           <Text style={styles.title}>{scheduleTitle}</Text>
           <Text style={styles.subtitle}>
             JUMATATU YA TAREHE {formatDate(dateFrom)} HADI TAREHE {formatDate(dateTo)}
@@ -269,7 +305,7 @@ function MainSchedulePDF({
           </View>
         </View>
 
-        <View style={styles.signatureWrap}>
+        <View style={styles.signatureWrap} wrap={false}>
           <Text style={styles.signatureLine}>....................................</Text>
           <Text style={styles.signatureName}>
             ({signatureName} - {signatureRank})
