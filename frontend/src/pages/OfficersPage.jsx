@@ -294,35 +294,35 @@ function OfficersPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-100 p-5 text-center shadow-sm sm:p-8">
-        <h1 className="text-lg font-semibold tracking-wide text-slate-800 sm:text-2xl">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-100 p-4 text-center shadow-sm sm:rounded-3xl sm:p-8">
+        <h1 className="text-base font-semibold tracking-wide text-slate-800 sm:text-2xl">
           Usimamizi wa Sajili ya Askari
         </h1>
-        <p className="mx-auto mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+        <p className="mx-auto mt-2 max-w-3xl text-sm leading-6 text-slate-600 sm:mt-3 sm:text-base sm:leading-7">
           Hapa unaweza kuongeza, kuhariri, kufuta, na kupakua orodha ya askari
           kwa muonekano safi na unaosomeka vizuri kwenye simu na desktop.
         </p>
       </div>
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 xl:p-7">
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50">
-              <UserPlus className="h-6 w-6 text-blue-700" />
+      <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:rounded-3xl sm:p-6 xl:p-7">
+        <div className="mb-5 flex flex-col gap-4 sm:mb-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-start gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 sm:h-12 sm:w-12">
+              <UserPlus className="h-5 w-5 text-blue-700 sm:h-6 sm:w-6" />
             </div>
 
-            <div>
-              <h2 className="text-lg font-semibold text-slate-800">
+            <div className="min-w-0">
+              <h2 className="text-lg font-semibold leading-7 text-slate-800">
                 {editId ? "Hariri Taarifa za Askari" : "Ongeza Askari Mpya"}
               </h2>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm leading-6 text-slate-500">
                 Jaza taarifa muhimu za askari kisha hifadhi
               </p>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <div className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:w-auto sm:min-w-[180px]">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               Jumla ya Askari
             </p>
@@ -332,7 +332,7 @@ function OfficersPage() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">
@@ -345,10 +345,10 @@ function OfficersPage() {
                 onChange={handleChange}
                 placeholder="Mfano: G.5696"
                 disabled={selectedRankDoesNotNeedForceNumber}
-                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10 disabled:cursor-not-allowed disabled:bg-slate-100"
+                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-base outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10 disabled:cursor-not-allowed disabled:bg-slate-100 sm:text-sm"
               />
               {selectedRankDoesNotNeedForceNumber && (
-                <p className="mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs leading-5 text-slate-500">
                   Cheo hiki hakihitaji force number kwenye ratiba.
                 </p>
               )}
@@ -364,7 +364,7 @@ function OfficersPage() {
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Andika jina kamili"
-                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10"
+                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-base outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10 sm:text-sm"
               />
             </div>
 
@@ -376,7 +376,7 @@ function OfficersPage() {
                 name="rank"
                 value={formData.rank}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10"
+                className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-base outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10 sm:text-sm"
               >
                 <option value="">Chagua cheo</option>
                 {rankOptions.map((rank) => (
@@ -394,11 +394,11 @@ function OfficersPage() {
                 <BadgeInfo className="h-5 w-5 text-[#1f2f86]" />
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                   Preview ya Format ya Ratiba
                 </p>
-                <p className="mt-2 text-sm font-medium text-slate-800">
+                <p className="mt-2 break-words text-sm font-medium leading-6 text-slate-800">
                   {formData.fullName && formData.rank
                     ? formatOfficerName({
                         forceNumber: formData.forceNumber,
@@ -429,7 +429,7 @@ function OfficersPage() {
               <button
                 type="button"
                 onClick={resetForm}
-                className="inline-flex items-center justify-center rounded-2xl border border-slate-300 px-5 py-3.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                className="inline-flex w-full items-center justify-center rounded-2xl border border-slate-300 px-5 py-3.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 sm:w-auto"
               >
                 Cancel
               </button>
@@ -438,13 +438,13 @@ function OfficersPage() {
         </form>
       </div>
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 xl:p-7">
+      <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:rounded-3xl sm:p-6 xl:p-7">
         <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div>
             <h2 className="text-lg font-semibold text-slate-800">
               Orodha ya Askari
             </h2>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm leading-6 text-slate-500">
               List nzima ya askari waliosajiliwa inaonekana hapa chini kwa uwazi
             </p>
           </div>
@@ -457,14 +457,14 @@ function OfficersPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Tafuta askari..."
-                className="w-full rounded-2xl border border-slate-300 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10"
+                className="w-full rounded-2xl border border-slate-300 py-3 pl-10 pr-4 text-base outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10 sm:text-sm"
               />
             </div>
 
             <button
               type="button"
               onClick={handleDownloadExcel}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100 sm:w-auto"
             >
               <FileSpreadsheet className="h-4 w-4" />
               Download Excel
@@ -510,7 +510,7 @@ function OfficersPage() {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-3xl border border-slate-200">
+        <div className="hidden overflow-hidden rounded-3xl border border-slate-200 lg:block">
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead className="bg-slate-50">
@@ -603,6 +603,75 @@ function OfficersPage() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        <div className="space-y-3 lg:hidden">
+          {loading ? (
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
+              Inapakia officers...
+            </div>
+          ) : filteredOfficers.length > 0 ? (
+            filteredOfficers.map((officer, index) => (
+              <div
+                key={officer.id}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm"
+              >
+                <div className="mb-3 flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Record {index + 1}
+                    </p>
+                    <h3 className="mt-1 text-sm font-semibold leading-6 text-slate-800 break-words">
+                      {officer.fullName}
+                    </h3>
+                  </div>
+                  <span className="rounded-xl bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm">
+                    {officer.rank}
+                  </span>
+                </div>
+
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="text-slate-500">Force No</span>
+                    <span className="text-right font-medium text-slate-800 break-all">
+                      {officer.forceNumber || "-"}
+                    </span>
+                  </div>
+
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="text-slate-500">Format</span>
+                    <span className="text-right font-medium text-[#1f2f86] break-words">
+                      {formatOfficerName(officer)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(officer)}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-50 px-3 py-2.5 text-sm font-medium text-amber-700 transition hover:bg-amber-100"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    Edit
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(officer.id)}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-50 px-3 py-2.5 text-sm font-medium text-rose-700 transition hover:bg-rose-100"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Futa
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
+              Hakuna askari waliopatikana
+            </div>
+          )}
         </div>
 
         {!loading && filteredOfficers.length > 0 ? (

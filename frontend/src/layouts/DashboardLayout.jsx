@@ -155,8 +155,13 @@ function DashboardLayout() {
               </div>
 
               <div className="absolute left-1/2 -translate-x-1/2 text-center">
-                <h1 className="text-[15px] font-semibold text-slate-800 sm:text-lg lg:text-[24px]">
-                  TANGANYIKA POLICE MANAGEMENT SYSTEM
+                <h1 className="font-semibold text-slate-800">
+                  <span className="text-sm sm:text-base md:hidden">
+                    TANGANYIKA PMS
+                  </span>
+                  <span className="hidden md:inline text-lg lg:text-[24px]">
+                    TANGANYIKA POLICE MANAGEMENT SYSTEM
+                  </span>
                 </h1>
               </div>
 
