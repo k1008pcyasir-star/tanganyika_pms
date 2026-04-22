@@ -66,10 +66,10 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   spacer: {
-    flexGrow: 1,
+    flexGrow: 0.45,
   },
   signatureWrap: {
-    marginTop: 20,
+    marginTop: 14,
     alignItems: "center",
     textAlign: "center",
   },
