@@ -29,6 +29,8 @@ const createSchedule = async (req, res) => {
       zamu_officer_phone,
       inspector_officer,
       inspector_officer_phone,
+      nco_officer,
+      nco_officer_phone,
       signature_name,
       signature_rank,
       signature_title,
@@ -55,6 +57,8 @@ const createSchedule = async (req, res) => {
         zamu_officer_phone,
         inspector_officer,
         inspector_officer_phone,
+        nco_officer,
+        nco_officer_phone,
         signature_name,
         signature_rank,
         signature_title,
@@ -64,7 +68,7 @@ const createSchedule = async (req, res) => {
       )
       VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8,
-        $9, $10, $11, $12, $13, $14, $15, $16
+        $9, $10, $11, $12, $13, $14, $15, $16, $17, $18
       )
       RETURNING *`,
       [
@@ -78,6 +82,8 @@ const createSchedule = async (req, res) => {
         zamu_officer_phone || null,
         inspector_officer || null,
         inspector_officer_phone || null,
+        nco_officer || null,
+        nco_officer_phone || null,
         signature_name || null,
         signature_rank || null,
         signature_title || null,
