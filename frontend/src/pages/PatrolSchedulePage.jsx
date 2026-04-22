@@ -68,6 +68,22 @@ function formatOfficerLabel(officer) {
   return `${forceNumber} ${rank} ${firstName}`.trim();
 }
 
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const cleanDate = String(dateStr).split("T")[0];
+  const parts = cleanDate.split("-");
+  if (parts.length !== 3) return cleanDate;
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+function formatPatrolTime(value) {
+  if (!value) return "";
+  return String(value)
+    .replace(/\s*HRS\s*/gi, "")
+    .replace(/\s*-\s*/g, "-")
+    .trim();
+}
+
 function PatrolSchedulePage() {
   const [mode, setMode] = useState("edit");
   const [title, setTitle] = useState("MPANGO KAZI WA MAOFISA WA ZAMU NA DORIA");
@@ -81,6 +97,9 @@ function PatrolSchedulePage() {
 
   const [inspectorOfficer, setInspectorOfficer] = useState("A/INSP MAARUFU");
   const [inspectorOfficerPhone, setInspectorOfficerPhone] = useState("0767376161");
+
+  const [ncoOfficer, setNcoOfficer] = useState("");
+  const [ncoOfficerPhone, setNcoOfficerPhone] = useState("");
 
   const [signatureName, setSignatureName] = useState("Paul T. Mashimbi - SSP");
   const [signatureTitle, setSignatureTitle] = useState(
@@ -129,12 +148,6 @@ function PatrolSchedulePage() {
     } finally {
       setOfficersLoading(false);
     }
-  };
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "";
-    const [y, m, d] = dateStr.split("-");
-    return `${d}/${m}/${y}`;
   };
 
   const patrolTime =
@@ -231,6 +244,8 @@ function PatrolSchedulePage() {
         zamu_officer_phone: zamuOfficerPhone,
         inspector_officer: inspectorOfficer,
         inspector_officer_phone: inspectorOfficerPhone,
+        nco_officer: ncoOfficer,
+        nco_officer_phone: ncoOfficerPhone,
         signature_name: signatureName,
         signature_title: signatureTitle,
         patrol_officers: patrolOfficers,
@@ -254,6 +269,8 @@ function PatrolSchedulePage() {
       zamuOfficerPhone={zamuOfficerPhone}
       inspectorOfficer={inspectorOfficer}
       inspectorOfficerPhone={inspectorOfficerPhone}
+      ncoOfficer={ncoOfficer}
+      ncoOfficerPhone={ncoOfficerPhone}
       patrolOfficers={patrolOfficers}
       signatureName={signatureName}
       signatureTitle={signatureTitle}
@@ -313,30 +330,42 @@ function PatrolSchedulePage() {
             className="mx-auto min-h-[297mm] w-full max-w-[210mm] bg-white p-4 text-black sm:p-[16mm]"
             style={{ fontFamily: '"Times New Roman", Times, serif' }}
           >
-            <div className="text-left">
+            <div className="text-center">
               <h2 className="text-[16px] font-bold uppercase underline leading-tight sm:text-[18px]">
                 {title}
-                {date ? ` LEO TAREHE ${formatDate(date)}` : ""}
               </h2>
+
+              {date ? (
+                <p className="mt-2 text-[14px] font-bold uppercase">
+                  TAREHE {formatDate(date)}
+                </p>
+              ) : null}
+
+              {patrolTime ? (
+                <p className="mt-1 text-[14px] font-bold uppercase">
+                  SAA {formatPatrolTime(patrolTime)}
+                </p>
+              ) : null}
             </div>
 
             <div className="mt-4 space-y-2 text-[14px] leading-relaxed">
-              {patrolTime ? <p>• MUDA WA DORIA - {patrolTime}</p> : null}
-
               <p>
-                • AFISA WA ZAMU - {zamuOfficer || "........................"}
-                {zamuOfficerPhone ? ` - SIMU NO ${zamuOfficerPhone}` : ""}
+                • AFISA WA ZAMU- {zamuOfficer || "........................"}
+                {zamuOfficerPhone ? ` SIMU NO: ${zamuOfficerPhone}` : ""}
               </p>
               <p>
-                • MKAAGUZI WA ZAMU -{" "}
-                {inspectorOfficer || "........................"}
-                {inspectorOfficerPhone ? ` - SIMU NO ${inspectorOfficerPhone}` : ""}
+                • MKAGUZI WA ZAMU- {inspectorOfficer || "........................"}
+                {inspectorOfficerPhone ? ` SIMU NO: ${inspectorOfficerPhone}` : ""}
+              </p>
+              <p>
+                • NCO WA ZAMU- {ncoOfficer || "........................"}
+                {ncoOfficerPhone ? ` SIMU NO: ${ncoOfficerPhone}` : ""}
               </p>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-6 pl-8">
               {patrolOfficers.length > 0 ? (
-                <ol className="space-y-2 pl-6 text-[14px] leading-relaxed">
+                <ol className="space-y-2 text-[14px] leading-relaxed">
                   {patrolOfficers.map((officer, index) => (
                     <li key={index}>{officer}</li>
                   ))}
@@ -373,7 +402,7 @@ function PatrolSchedulePage() {
         </h1>
         <p className="mx-auto mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
           Tayarisha ratiba ya doria ya siku, weka muda, maofisa wa zamu,
-          chagua askari, kisha preview au hifadhi kwa muonekano wa kitaalamu.
+          mkaguzi, NCO wa zamu, chagua askari, kisha preview au hifadhi kwa muonekano wa kitaalamu.
         </p>
       </div>
 
@@ -519,6 +548,32 @@ function PatrolSchedulePage() {
               type="text"
               value={inspectorOfficerPhone}
               onChange={(e) => setInspectorOfficerPhone(e.target.value)}
+              className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10"
+            />
+          </div>
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">
+              NCO wa Zamu
+            </label>
+            <input
+              type="text"
+              value={ncoOfficer}
+              onChange={(e) => setNcoOfficer(e.target.value.toUpperCase())}
+              className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-700">
+              Simu ya NCO wa Zamu
+            </label>
+            <input
+              type="text"
+              value={ncoOfficerPhone}
+              onChange={(e) => setNcoOfficerPhone(e.target.value)}
               className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-700/10"
             />
           </div>

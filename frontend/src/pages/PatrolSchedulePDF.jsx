@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   infoBlock: {
-    marginTop: 8,
-    marginBottom: 10,
+    marginTop: 10,
+    marginBottom: 12,
   },
   infoLine: {
     fontSize: 11,
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
   listWrap: {
     marginTop: 8,
     marginBottom: 20,
+    paddingLeft: 42,
   },
   listItem: {
     fontSize: 11,
@@ -81,6 +82,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: "Times-Bold",
     textTransform: "uppercase",
+    textAlign: "center",
   },
 });
 
@@ -117,6 +119,8 @@ function PatrolSchedulePDF({
   zamuOfficerPhone = "",
   inspectorOfficer = "",
   inspectorOfficerPhone = "",
+  ncoOfficer = "",
+  ncoOfficerPhone = "",
   patrolOfficers = [],
   signatureName = "",
   signatureTitle = "MKUU WA KITUO CHA POLISI TANGANYIKA",
@@ -129,7 +133,7 @@ function PatrolSchedulePDF({
 
           {date ? (
             <Text style={styles.subTitleLine}>
-              LEO TAREHE {formatDate(date)}
+              TAREHE {formatDate(date)}
             </Text>
           ) : null}
 
@@ -143,15 +147,22 @@ function PatrolSchedulePDF({
         <View style={styles.infoBlock}>
           <View style={styles.bulletWrap}>
             <Text style={styles.infoLine}>
-              • AFISA WA ZAMU - {zamuOfficer || "........................"}
-              {zamuOfficerPhone ? ` - SIMU NO ${zamuOfficerPhone}` : ""}
+              • AFISA WA ZAMU- {zamuOfficer || "........................"}
+              {zamuOfficerPhone ? ` SIMU NO: ${zamuOfficerPhone}` : ""}
             </Text>
           </View>
 
           <View style={styles.bulletWrap}>
             <Text style={styles.infoLine}>
-              • MKAAGUZI WA ZAMU - {inspectorOfficer || "........................"}
-              {inspectorOfficerPhone ? ` - SIMU NO ${inspectorOfficerPhone}` : ""}
+              • MKAGUZI WA ZAMU- {inspectorOfficer || "........................"}
+              {inspectorOfficerPhone ? ` SIMU NO: ${inspectorOfficerPhone}` : ""}
+            </Text>
+          </View>
+
+          <View style={styles.bulletWrap}>
+            <Text style={styles.infoLine}>
+              • NCO WA ZAMU- {ncoOfficer || "........................"}
+              {ncoOfficerPhone ? ` SIMU NO: ${ncoOfficerPhone}` : ""}
             </Text>
           </View>
         </View>
