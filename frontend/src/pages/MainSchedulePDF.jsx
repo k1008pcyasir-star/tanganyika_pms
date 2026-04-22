@@ -123,8 +123,12 @@ const sectionOrder = [
 
 function formatDate(dateStr) {
   if (!dateStr) return "";
-  const parts = dateStr.split("-");
-  if (parts.length !== 3) return dateStr;
+
+  const cleanDate = String(dateStr).split("T")[0];
+  const parts = cleanDate.split("-");
+
+  if (parts.length !== 3) return cleanDate;
+
   return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
 
@@ -163,14 +167,12 @@ function normalizeFixedValue(value) {
 function estimateFixedBlockHeight(item) {
   const values = normalizeFixedValue(item.value);
   const itemCount = values.length > 0 ? values.length : 1;
-
   return 1.8 + itemCount * 0.95;
 }
 
 function estimateSectionHeight(section) {
   const officers = section?.officers || [];
   const itemCount = officers.length > 0 ? officers.length : 1;
-
   return 2 + itemCount * 0.95;
 }
 

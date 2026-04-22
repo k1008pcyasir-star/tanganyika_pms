@@ -29,6 +29,18 @@ const styles = StyleSheet.create({
     textDecoration: "underline",
     lineHeight: 1.3,
   },
+  subTitleLine: {
+    marginTop: 6,
+    fontSize: 11,
+    fontFamily: "Times-Bold",
+    textTransform: "uppercase",
+  },
+  timeLine: {
+    marginTop: 4,
+    fontSize: 11,
+    fontFamily: "Times-Bold",
+    textTransform: "uppercase",
+  },
   infoBlock: {
     marginTop: 8,
     marginBottom: 10,
@@ -71,9 +83,22 @@ const styles = StyleSheet.create({
 
 function formatDate(dateStr) {
   if (!dateStr) return "";
-  const parts = dateStr.split("-");
-  if (parts.length !== 3) return dateStr;
+
+  const cleanDate = String(dateStr).split("T")[0];
+  const parts = cleanDate.split("-");
+
+  if (parts.length !== 3) return cleanDate;
+
   return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+function formatPatrolTime(value) {
+  if (!value) return "";
+
+  return String(value)
+    .replace(/\s*HRS\s*/gi, "")
+    .replace(/\s*-\s*/g, "-")
+    .trim();
 }
 
 function renderOfficerLabel(officer) {
@@ -97,19 +122,22 @@ function PatrolSchedulePDF({
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.title}>
-            {title}
-            {date ? ` LEO TAREHE ${formatDate(date)}` : ""}
-          </Text>
+          <Text style={styles.title}>{title}</Text>
+
+          {date ? (
+            <Text style={styles.subTitleLine}>
+              LEO TAREHE {formatDate(date)}
+            </Text>
+          ) : null}
+
+          {patrolTime ? (
+            <Text style={styles.timeLine}>
+              SAA {formatPatrolTime(patrolTime)}
+            </Text>
+          ) : null}
         </View>
 
         <View style={styles.infoBlock}>
-          {patrolTime ? (
-            <View style={styles.bulletWrap}>
-              <Text style={styles.infoLine}>• MUDA WA DORIA - {patrolTime}</Text>
-            </View>
-          ) : null}
-
           <View style={styles.bulletWrap}>
             <Text style={styles.infoLine}>
               • AFISA WA ZAMU - {zamuOfficer || "........................"}
