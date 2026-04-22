@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     lineHeight: 1.25,
   },
   header: {
-    textAlign: "left",
+    textAlign: "center",
     marginBottom: 12,
   },
   title: {
@@ -28,18 +28,21 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     textDecoration: "underline",
     lineHeight: 1.3,
+    textAlign: "center",
   },
   subTitleLine: {
     marginTop: 6,
     fontSize: 11,
     fontFamily: "Times-Bold",
     textTransform: "uppercase",
+    textAlign: "center",
   },
   timeLine: {
     marginTop: 4,
     fontSize: 11,
     fontFamily: "Times-Bold",
     textTransform: "uppercase",
+    textAlign: "center",
   },
   infoBlock: {
     marginTop: 8,
