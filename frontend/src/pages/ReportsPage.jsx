@@ -38,6 +38,8 @@ function normalizeSchedule(item) {
     zamuOfficerPhone: item.zamu_officer_phone,
     inspectorOfficer: item.inspector_officer,
     inspectorOfficerPhone: item.inspector_officer_phone,
+    ncoOfficer: item.nco_officer,
+    ncoOfficerPhone: item.nco_officer_phone,
     signatureName: item.signature_name,
     signatureRank: item.signature_rank,
     signatureTitle: item.signature_title,
@@ -128,6 +130,8 @@ function ReportsPage() {
           zamuOfficerPhone={selectedSchedule.zamuOfficerPhone}
           inspectorOfficer={selectedSchedule.inspectorOfficer}
           inspectorOfficerPhone={selectedSchedule.inspectorOfficerPhone}
+          ncoOfficer={selectedSchedule.ncoOfficer}
+          ncoOfficerPhone={selectedSchedule.ncoOfficerPhone}
           patrolOfficers={selectedSchedule.patrolOfficers || []}
           signatureName={selectedSchedule.signatureName}
           signatureTitle={selectedSchedule.signatureTitle}
@@ -396,6 +400,19 @@ function ReportsPage() {
                         Muda wa Doria:
                       </span>{" "}
                       {selectedSchedule.patrolTime}
+                    </p>
+                  ) : null}
+
+                  {selectedSchedule.type === "patrol" &&
+                  selectedSchedule.ncoOfficer ? (
+                    <p>
+                      <span className="font-semibold text-slate-800">
+                        NCO wa Zamu:
+                      </span>{" "}
+                      {selectedSchedule.ncoOfficer}
+                      {selectedSchedule.ncoOfficerPhone
+                        ? ` - ${selectedSchedule.ncoOfficerPhone}`
+                        : ""}
                     </p>
                   ) : null}
 

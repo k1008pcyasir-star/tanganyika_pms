@@ -17,10 +17,12 @@ const styles = StyleSheet.create({
     fontFamily: "Times-Roman",
     color: "#000000",
     lineHeight: 1.25,
+    display: "flex",
+    flexDirection: "column",
   },
   header: {
     textAlign: "center",
-    marginBottom: 12,
+    marginBottom: 14,
   },
   title: {
     fontSize: 13,
@@ -44,28 +46,30 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     textAlign: "center",
   },
+  body: {
+    marginTop: 4,
+  },
   infoBlock: {
-    marginTop: 10,
     marginBottom: 12,
+    paddingLeft: 8,
   },
   infoLine: {
     fontSize: 11,
-    marginBottom: 4,
-  },
-  bulletWrap: {
-    marginBottom: 4,
+    marginBottom: 5,
   },
   listWrap: {
-    marginTop: 8,
-    marginBottom: 20,
-    paddingLeft: 42,
+    marginTop: 10,
+    paddingLeft: 44,
   },
   listItem: {
     fontSize: 11,
-    marginBottom: 4,
+    marginBottom: 5,
+  },
+  spacer: {
+    flexGrow: 1,
   },
   signatureWrap: {
-    marginTop: 50,
+    marginTop: 20,
     alignItems: "center",
     textAlign: "center",
   },
@@ -76,9 +80,11 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontSize: 11,
     fontFamily: "Times-Bold",
+    textTransform: "uppercase",
+    textAlign: "center",
   },
   signatureTitle: {
-    marginTop: 2,
+    marginTop: 4,
     fontSize: 11,
     fontFamily: "Times-Bold",
     textTransform: "uppercase",
@@ -144,44 +150,42 @@ function PatrolSchedulePDF({
           ) : null}
         </View>
 
-        <View style={styles.infoBlock}>
-          <View style={styles.bulletWrap}>
+        <View style={styles.body}>
+          <View style={styles.infoBlock}>
             <Text style={styles.infoLine}>
               • AFISA WA ZAMU- {zamuOfficer || "........................"}
               {zamuOfficerPhone ? ` SIMU NO: ${zamuOfficerPhone}` : ""}
             </Text>
-          </View>
 
-          <View style={styles.bulletWrap}>
             <Text style={styles.infoLine}>
               • MKAGUZI WA ZAMU- {inspectorOfficer || "........................"}
               {inspectorOfficerPhone ? ` SIMU NO: ${inspectorOfficerPhone}` : ""}
             </Text>
-          </View>
 
-          <View style={styles.bulletWrap}>
             <Text style={styles.infoLine}>
               • NCO WA ZAMU- {ncoOfficer || "........................"}
               {ncoOfficerPhone ? ` SIMU NO: ${ncoOfficerPhone}` : ""}
             </Text>
           </View>
+
+          <View style={styles.listWrap}>
+            {patrolOfficers.length > 0 ? (
+              patrolOfficers.map((officer, index) => (
+                <Text key={index} style={styles.listItem}>
+                  {index + 1}. {renderOfficerLabel(officer)}
+                </Text>
+              ))
+            ) : (
+              <>
+                <Text style={styles.listItem}>1. ........................</Text>
+                <Text style={styles.listItem}>2. ........................</Text>
+                <Text style={styles.listItem}>3. ........................</Text>
+              </>
+            )}
+          </View>
         </View>
 
-        <View style={styles.listWrap}>
-          {patrolOfficers.length > 0 ? (
-            patrolOfficers.map((officer, index) => (
-              <Text key={index} style={styles.listItem}>
-                {index + 1}. {renderOfficerLabel(officer)}
-              </Text>
-            ))
-          ) : (
-            <>
-              <Text style={styles.listItem}>1. ........................</Text>
-              <Text style={styles.listItem}>2. ........................</Text>
-              <Text style={styles.listItem}>3. ........................</Text>
-            </>
-          )}
-        </View>
+        <View style={styles.spacer} />
 
         <View style={styles.signatureWrap}>
           <Text style={styles.signatureLine}>....................................</Text>
